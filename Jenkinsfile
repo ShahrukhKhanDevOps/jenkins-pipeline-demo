@@ -22,7 +22,7 @@ pipeline {
 
                         }
 
-                        sh 'cd DotNetDemo && dotnet build'
+                        sh 'cd WrongFolder && dotnet build'
 
                     }
 
