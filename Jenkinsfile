@@ -25,8 +25,10 @@ pipeline {
                 }
 
                 echo 'Pipeline Continued After Error'
-                
-                currentBuild.result = 'UNSTABLE'
+
+                script {
+                    currentBuild.result = 'UNSTABLE'
+                }
 
             }
 
@@ -42,6 +44,10 @@ pipeline {
 
         failure {
             echo 'Build Failed!'
+        }
+
+        unstable {
+            echo 'Build is Unstable!'
         }
 
         always {
