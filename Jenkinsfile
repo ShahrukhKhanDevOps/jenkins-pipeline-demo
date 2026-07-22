@@ -4,31 +4,53 @@ pipeline {
 
     stages {
 
+       pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Show Workspace') {
+
+            steps {
+
+                echo 'Current Directory:'
+
+                sh 'pwd'
+
+                echo 'Files:'
+
+                sh 'ls -la'
+
+            }
+
+        }
+
         stage('Build .NET Application') {
 
             steps {
 
                 echo 'Building .NET Application...'
 
-                withCredentials([
-                    string(credentialsId: 'demo-secret', variable: 'MY_SECRET')
-                ]) {
+                sh '''
+                    cd DotNetDemo
+                    dotnet build
+                '''
 
-                    echo 'Secret Loaded Successfully'
+            }
 
-                }
+        }
 
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+        stage('Run .NET Application') {
 
-                    sh 'cd WrongFolder && dotnet build'
+            steps {
 
-                }
+                echo 'Running .NET Application...'
 
-                echo 'Pipeline Continued After Error'
-
-                script {
-                    currentBuild.result = 'UNSTABLE'
-                }
+                sh '''
+                    cd DotNetDemo
+                    dotnet run
+                '''
 
             }
 
@@ -44,10 +66,6 @@ pipeline {
 
         failure {
             echo 'Build Failed!'
-        }
-
-        unstable {
-            echo 'Build is Unstable!'
         }
 
         always {
