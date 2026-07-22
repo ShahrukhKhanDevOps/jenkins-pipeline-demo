@@ -8,17 +8,31 @@ pipeline {
 
             steps {
 
-                echo 'Building .NET Application...'
+                script {
 
-                withCredentials([
-                    string(credentialsId: 'demo-secret', variable: 'MY_SECRET')
-                ]) {
+                    try {
 
-                    echo 'Secret Loaded Successfully'
+                        echo 'Building .NET Application...'
+
+                        withCredentials([
+                            string(credentialsId: 'demo-secret', variable: 'MY_SECRET')
+                        ]) {
+
+                            echo 'Secret Loaded Successfully'
+
+                        }
+
+                        sh 'cd DotNetDemo && dotnet build'
+
+                    }
+
+                    catch(Exception e) {
+
+                        echo 'Error Occurred During Build!'
+
+                    }
 
                 }
-
-                sh 'cd DotNetDemo && dotnet build'
 
             }
 
