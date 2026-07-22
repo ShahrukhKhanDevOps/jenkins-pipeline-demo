@@ -25,6 +25,8 @@ pipeline {
                 }
 
                 echo 'Pipeline Continued After Error'
+                
+                currentBuild.result = 'UNSTABLE'
 
             }
 
