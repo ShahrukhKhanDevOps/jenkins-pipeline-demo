@@ -10,6 +10,14 @@ pipeline {
 
                 echo 'Building .NET Application...'
 
+                withCredentials([
+                    string(credentialsId: 'demo-secret', variable: 'MY_SECRET')
+                ]) {
+
+                    echo 'Secret Loaded Successfully'
+
+                }
+
                 sh 'cd DotNetDemo && dotnet build'
 
             }
@@ -34,4 +42,4 @@ pipeline {
 
     }
 
-} 
+}
