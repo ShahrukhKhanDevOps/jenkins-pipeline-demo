@@ -8,31 +8,23 @@ pipeline {
 
             steps {
 
-                script {
+                echo 'Building .NET Application...'
 
-                    try {
+                withCredentials([
+                    string(credentialsId: 'demo-secret', variable: 'MY_SECRET')
+                ]) {
 
-                        echo 'Building .NET Application...'
-
-                        withCredentials([
-                            string(credentialsId: 'demo-secret', variable: 'MY_SECRET')
-                        ]) {
-
-                            echo 'Secret Loaded Successfully'
-
-                        }
-
-                        sh 'cd WrongFolder && dotnet build'
-
-                    }
-
-                    catch(Exception e) {
-
-                        echo 'Error Occurred During Build!'
-
-                    }
+                    echo 'Secret Loaded Successfully'
 
                 }
+
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+
+                    sh 'cd WrongFolder && dotnet build'
+
+                }
+
+                echo 'Pipeline Continued After Error'
 
             }
 
